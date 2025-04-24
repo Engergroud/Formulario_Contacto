@@ -5,11 +5,21 @@ document.getElementById('qrForm').addEventListener('submit', function(event) {
     const telefono = document.getElementById('telefono').value;
     const correo = document.getElementById('correo').value;
 
+    if (!validatePhoneNumber(telefono)) {
+        alert('Por favor, ingrese un número de teléfono válido en formato (XXX) XXX-XXXX.');
+        return;
+    }
+
     const vcard = `BEGIN:VCARD\nVERSION:3.0\nN:${apellido};${nombre}\nFN:${nombre} ${apellido}\nTEL;TYPE=CELL:${telefono}\nEMAIL:${correo}\nEND:VCARD`;
 
     generateQRCode(vcard);
     openModal();
 });
+
+function validatePhoneNumber(phoneNumber) {
+    const dominicanPhoneRegex = /^\(\d{3}\) \d{3}-\d{4}$/;
+    return dominicanPhoneRegex.test(phoneNumber);
+}
 
 function generateQRCode(text) {
     const qrCodeContainer = document.getElementById('qrCodeContainer');
@@ -30,6 +40,14 @@ function openModal() {
 
 function closeModal() {
     document.getElementById('qrModal').style.display = 'none';
+    clearFormFields();
+}
+
+function clearFormFields() {
+    document.getElementById('nombre').value = '';
+    document.getElementById('apellido').value = '';
+    document.getElementById('telefono').value = '';
+    document.getElementById('correo').value = '';
 }
 
 document.getElementsByClassName('close')[0].onclick = function() {
